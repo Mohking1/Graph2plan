@@ -51,7 +51,7 @@ def boxes_to_layout(vecs, boxes, obj_to_img, H, W=None, pooling='sum'):
   # If we don't add extra spatial dimensions here then out-of-bounds
   # elements won't be automatically set to 0
   img_in = vecs.view(O, D, 1, 1).expand(O, D, 8, 8)
-  sampled = F.grid_sample(img_in, grid)   # (O, D, H, W)
+  sampled = F.grid_sample(img_in, grid, align_corners=True)   # (O, D, H, W)
 
   # Explicitly masking makes everything quite a bit slower.
   # If we rely on implicit masking the interpolated boxes end up
@@ -84,7 +84,7 @@ def masks_to_layout(vecs, boxes, masks, obj_to_img, H, W=None, pooling='sum'):
     W = H
   grid = _boxes_to_grid(boxes, H, W)
   img_in = vecs.view(O, D, 1, 1) * masks.float().view(O, 1, M, M)
-  sampled = F.grid_sample(img_in, grid)
+  sampled = F.grid_sample(img_in, grid, align_corners=True)  
   out = _pool_samples(sampled, obj_to_img, pooling=pooling)
   return out
 
@@ -193,7 +193,7 @@ def masks_to_seg(boxes, masks, objs, obj_to_img, H, W=None, num_classes=15):
     W = H
   N = obj_to_img.data.max().item() + 1
   grid = _boxes_to_grid(boxes, H, W)
-  mask_sampled = F.grid_sample(masks.float().view(O, 1, M, M), grid)
+  mask_sampled = F.grid_sample(masks.float().view(O, 1, M, M), grid, align_corners=True)
   seg = torch.zeros((N,num_classes,H,W)).to(device)
   # obj_to_img_list = [i.item() for i in list(obj_to_img)]
   for i in range(N):
@@ -227,7 +227,7 @@ def boxes_to_seg(boxes, objs, obj_to_img, H, W=None,num_classes=15):
   N = obj_to_img.data.max().item() + 1
 
   grid = _boxes_to_grid(boxes, H, W)
-  mask_sampled = F.grid_sample(torch.ones(O,1,8,8).to(boxes), grid)
+  mask_sampled = F.grid_sample(torch.ones(O,1,8,8).to(boxes), grid, align_corners=True)
   
   seg = torch.zeros((N,num_classes,H,W)).to(device)
   obj_to_img_list = [i.item() for i in list(obj_to_img)]

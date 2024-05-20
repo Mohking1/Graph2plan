@@ -30,7 +30,6 @@ urlpatterns = [
     path(r'index/GraphSearch/', views.GraphSearch),
     path(r'index/RelBox/', views.RelBox),
     path(r'index/Save_Editbox/', views.Save_Editbox),
-
     path('home', views.home),
 
 

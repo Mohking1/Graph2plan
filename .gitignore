@@ -1,0 +1,13 @@
+/Interface/static/Data/Img/
+/.venv/
+/.vscode/
+/Interface/Houseweb/__pycache__/
+/Interface/House/__pycache__/
+/Interface/model/__pycache__/
+/Interface/retrieval/__pycache__/
+/Network/model/__pycache__/
+/Interface/static/Data/snapshot_train/
+/Network/data/data_train.mat
+/Interface/static/Data/data_test_converted.pkl
+/Interface/static/Data/data_train_converted.pkl
+/Interface/retrieval/tf_train.npy
